@@ -1,0 +1,33 @@
+{
+  "dashboard": {
+    "title": "NestJS Monitoring",
+    "tags": ["nestjs", "monitoring"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "title": "API Requests",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total[5m])",
+            "legendFormat": "{{method}} {{route}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "title": "Memory Usage",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "process_resident_memory_bytes",
+            "format": "bytes"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 8}
+      }
+    ],
+    "schemaVersion": 27,
+    "version": 1
+  }
+}
