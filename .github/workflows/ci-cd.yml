@@ -74,8 +74,7 @@ jobs:
       - name: Instalar Dependências
         run: npm ci
 
-      - name: Lint
-        run: npm run lint || echo "Lint não configurado"
+      # Lint removido intencionalmente → executado em workflow separado
 
       - name: Testes Unitários
         run: npm test -- --coverage --passWithNoTests
@@ -145,8 +144,13 @@ jobs:
               -f compose/app.yml \
               up -d
             
+            echo "Aguardando serviços..."
             sleep 20
+            
+            echo "Verificando health check..."
             curl -f http://localhost:3000/health || exit 1
+            
+            echo "Teste local concluído com sucesso!"
             
             docker compose \
               -f docker-compose.yml \
@@ -154,4 +158,6 @@ jobs:
               -f compose/cache.yml \
               -f compose/app.yml \
               down
+          else
+            echo "Arquivos de compose não encontrados. Pulando teste local."
           fi
