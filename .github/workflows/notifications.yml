@@ -12,7 +12,7 @@ jobs:
     name: 📢 Enviar Notificações
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
-    
+
     steps:
       - name: Obter Status do Workflow
         id: workflow_status
@@ -21,7 +21,6 @@ jobs:
           echo "Status: ${{ github.event.workflow_run.conclusion }}"
           echo "URL: ${{ github.event.workflow_run.html_url }}"
           
-          # Salva em outputs
           echo "workflow_name=${{ github.event.workflow_run.name }}" >> $GITHUB_OUTPUT
           echo "conclusion=${{ github.event.workflow_run.conclusion }}" >> $GITHUB_OUTPUT
           echo "html_url=${{ github.event.workflow_run.html_url }}" >> $GITHUB_OUTPUT
@@ -38,8 +37,7 @@ jobs:
           mention: here
           if_mention: failure
 
- 
-     
+    
       - name: Criar Issue no GitHub em caso de falha
         if: github.event.workflow_run.conclusion == 'failure'
         uses: actions/github-script@v6
@@ -50,12 +48,11 @@ jobs:
               repo: context.repo.repo,
               state: 'open'
             });
-            
-            // Verifica se já existe issue com mesmo título
+
             const existingIssue = issues.find(issue => 
               issue.title.includes(`Pipeline Failure: ${context.workflow}`)
             );
-            
+
             if (!existingIssue) {
               await github.rest.issues.create({
                 owner: context.repo.owner,
