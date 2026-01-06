@@ -1,0 +1,101 @@
+name: Notifications
+
+on:
+  workflow_run:
+    workflows: ["CI/CD Pipeline"]
+    types:
+      - completed
+      - requested
+
+jobs:
+  notify:
+    name: 📢 Enviar Notificações
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
+
+    steps:
+      - name: Obter Status do Workflow
+        id: workflow_status
+        run: |
+          echo "Workflow: ${{ github.event.workflow_run.name }}"
+          echo "Status: ${{ github.event.workflow_run.conclusion }}"
+          echo "URL: ${{ github.event.workflow_run.html_url }}"
+          
+          echo "workflow_name=${{ github.event.workflow_run.name }}" >> $GITHUB_OUTPUT
+          echo "conclusion=${{ github.event.workflow_run.conclusion }}" >> $GITHUB_OUTPUT
+          echo "html_url=${{ github.event.workflow_run.html_url }}" >> $GITHUB_OUTPUT
+
+      - name: Notificar Slack
+        if: always()
+        uses: 8398a7/action-slack@v3
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          status: ${{ github.event.workflow_run.conclusion }}
+          author_name: GitHub Actions
+          fields: workflow,event,commit,message,ref
+          mention: here
+          if_mention: failure
+
+      - name: Notificar Microsoft Teams
+        if: always() && github.event.workflow_run.conclusion == 'failure'
+        uses: aliencube/microsoft-teams-actions@v0.8.0
+        with:
+          webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK_URL }}
+          title: "Pipeline Falhou - ${{ github.repository }}"
+          summary: "A pipeline ${{ github.event.workflow_run.name }} falhou"
+          text: |
+            **Repositório:** ${{ github.repository }}
+            **Workflow:** ${{ github.event.workflow_run.name }}
+            **Status:** ❌ Falha
+            **Branch:** ${{ github.event.workflow_run.head_branch }}
+            **Commit:** ${{ github.event.workflow_run.head_sha }}
+            **URL:** [Ver logs](${{ github.event.workflow_run.html_url }})
+
+      - name: Notificar Email (via SendGrid)
+        if: always() && github.event.workflow_run.conclusion == 'failure'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.sendgrid.net
+          server_port: 587
+          username: apikey
+          password: ${{ secrets.SENDGRID_API_KEY }}
+          subject: "🚨 Pipeline Falhou: ${{ github.repository }}"
+          to: ${{ secrets.EMAIL_TO }}
+          from: notifications@seudominio.com  # ← Mude para um email VERIFICADO no SendGrid
+          body: |
+            A pipeline falhou no repositório ${{ github.repository }}
+
+            Detalhes:
+            - Workflow: ${{ github.event.workflow_run.name }}
+            - Status: ${{ github.event.workflow_run.conclusion }}
+            - Branch: ${{ github.event.workflow_run.head_branch }}
+            - Commit: ${{ github.event.workflow_run.head_sha }}
+            - URL: ${{ github.event.workflow_run.html_url }}
+
+            Por favor, verifique os logs para mais detalhes.
+
+      - name: Criar Issue no GitHub em caso de falha
+        if: github.event.workflow_run.conclusion == 'failure'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open'
+            });
+
+            const existingIssue = issues.find(issue => 
+              issue.title.includes(`Pipeline Failure: ${context.workflow}`)
+            );
+
+            if (!existingIssue) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `🚨 Pipeline Failure: ${context.workflow}`,
+                body: `A pipeline **${context.workflow}** falhou.\n\n**URL:** ${context.payload.workflow_run.html_url}\n**Branch:** ${context.payload.workflow_run.head_branch}\n**Commit:** ${context.payload.workflow_run.head_sha}`,
+                labels: ['bug', 'pipeline-failure']
+              });
+            }
