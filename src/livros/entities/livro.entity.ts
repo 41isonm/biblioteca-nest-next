@@ -1,16 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Emprestimo } from "src/emprestimo/entities/emprestimo.entity";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 
 @Entity()
 export class Livro {
     @PrimaryGeneratedColumn()
-    livroid: number
+    livroid: number;
 
     @Column()
-    livrotitulo: string
+    livrotitulo: string;
 
     @Column()
-    livrodescricao: string
+    livrodescricao: string;
 
     @Column()
-    livropreco: number
+    livropreco: number;
+
+    @OneToMany(() => Emprestimo, (emprestimo) => emprestimo.livro)
+    emprestimos: Emprestimo[];
 }

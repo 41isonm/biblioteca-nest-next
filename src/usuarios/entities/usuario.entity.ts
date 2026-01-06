@@ -1,16 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Emprestimo } from "src/emprestimo/entities/emprestimo.entity";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 
 @Entity()
 export class Usuario {
     @PrimaryGeneratedColumn()
-    id: number
+    id: number;
 
     @Column()
-    firstName: string
+    primeiroNome: string;
 
     @Column()
-    email: string
+    email: string;
 
     @Column()
-    isActive: boolean
+    isActive: boolean;
+
+    @OneToMany(() => Emprestimo, (emprestimo) => emprestimo.usuario)
+    emprestimos: Emprestimo[];
 }
