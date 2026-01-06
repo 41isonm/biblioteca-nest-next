@@ -1,0 +1,54 @@
+name: Lint Check
+
+on:
+  push:
+    branches:
+      - main      # ou master, se for o nome da sua branch principal
+      - develop   # opcional: adicione outras branches importantes
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: 🧹 Lint (ESLint + Prettier)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v4
+
+      - name: 🟢 Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20   # ou 18, ajuste conforme sua versão
+          cache: 'npm'       # cacheia node_modules automaticamente
+
+      - name: 📦 Instalar dependências (raiz + backend + frontend)
+        run: |
+          npm install               # instala dependências da raiz, se houver
+          cd backend && npm install
+          cd ../frontend && npm install
+
+      - name: 🔍 Lint Backend (NestJS)
+        run: |
+          cd backend
+          npm run lint
+        continue-on-error: false   # falha o job se tiver erro
+
+      - name: 🔍 Lint Frontend (Next.js)
+        run: |
+          cd frontend
+          npm run lint
+        continue-on-error: false
+
+      - name: ✅ Verificação concluída
+        if: success()
+        run: echo "🎉 Lint passou com sucesso em backend e frontend!"
+
+      - name: ❌ Lint falhou
+        if: failure()
+        run: |
+          echo "🚨 Erros de lint encontrados!"
+          echo "Corrija os problemas de estilo antes de mergear."
+          exit 1
