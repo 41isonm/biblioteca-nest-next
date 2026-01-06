@@ -24,7 +24,7 @@ jobs:
         run: |
           echo "📦 Validando docker-compose..."
           if [ -f docker-compose.yml ] && [ -f compose/database.yml ]; then
-            docker-compose \
+            docker compose \
               -f docker-compose.yml \
               -f compose/database.yml \
               -f compose/cache.yml \
@@ -138,7 +138,7 @@ jobs:
       - name: Subir Ambiente de Teste
         run: |
           if [ -f docker-compose.yml ] && [ -f compose/database.yml ]; then
-            docker-compose \
+            docker compose \
               -f docker-compose.yml \
               -f compose/database.yml \
               -f compose/cache.yml \
@@ -146,9 +146,9 @@ jobs:
               up -d
             
             sleep 20
-            curl -f http://localhost:3000/health
+            curl -f http://localhost:3000/health || exit 1
             
-            docker-compose \
+            docker compose \
               -f docker-compose.yml \
               -f compose/database.yml \
               -f compose/cache.yml \
