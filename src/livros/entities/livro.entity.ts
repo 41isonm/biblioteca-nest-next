@@ -1,20 +1,20 @@
-import { Emprestimo } from "src/emprestimo/entities/emprestimo.entity";
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Emprestimo } from '../../emprestimo/entities/emprestimo.entity';
 
-@Entity()
+@Entity('livros') 
 export class Livro {
-    @PrimaryGeneratedColumn()
-    livroid: number;
+  @PrimaryGeneratedColumn()
+  livroid: number;
 
-    @Column()
-    livrotitulo: string;
+  @Column()
+  livrotitulo: string;
 
-    @Column()
-    livrodescricao: string;
+  @Column()
+  livrodescricao: string;
 
-    @Column()
-    livropreco: number;
+  @Column()
+  livropreco: number;
 
-    @OneToMany(() => Emprestimo, (emprestimo) => emprestimo.livro)
-    emprestimos: Emprestimo[];
+  @OneToMany(() => Emprestimo, (emprestimo) => emprestimo.livro)
+  emprestimos: Emprestimo[];
 }

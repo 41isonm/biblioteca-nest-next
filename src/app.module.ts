@@ -32,17 +32,17 @@ import { EmprestimoModule } from './emprestimo/emprestimo.module';
           username: configService.get('DB_USERNAME'),
           password: configService.get('DB_PASSWORD'),
           database: configService.get('DB_DATABASE'),
-          entities: [
-            __dirname + '/usuarios/entities/*.entity{.ts,.js}',
-            __dirname + '/livros/entities/*.entity{.ts,.js}',
-            __dirname + '/emprestimo/entities/*.entity{.ts,.js}',
-          ],
+entities: [
+          __dirname + '/**/*.entity{.ts,.js}',
+          __dirname + '/**/entities/*.entity{.ts,.js}'
+        ],   
           synchronize: configService.get('NODE_ENV') === 'development',
           logging: configService.get('NODE_ENV') === 'development',
         }),
       }),
       UsuariosModule,
       LivrosModule,
+      
       EmprestimoModule,
     ],
   controllers: [AppController],

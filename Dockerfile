@@ -10,8 +10,6 @@ RUN npm ci
 
 COPY . .
 
-RUN npm run build
-
 EXPOSE 3000
 
-CMD ["nest", "start", "--watch"]
+CMD ["npm", "run", "start:dev"]

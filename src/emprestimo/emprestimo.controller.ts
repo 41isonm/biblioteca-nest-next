@@ -22,10 +22,6 @@ export class EmprestimoController {
     return this.emprestimoService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEmprestimoDto: UpdateEmprestimoDto) {
-    return this.emprestimoService.update(+id, updateEmprestimoDto);
-  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
