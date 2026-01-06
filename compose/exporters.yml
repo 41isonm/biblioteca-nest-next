@@ -1,0 +1,26 @@
+services:
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    container_name: nest-postgres-exporter
+    restart: unless-stopped
+    environment:
+      DATA_SOURCE_NAME: "postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-devops123}@postgres:5432/${DB_NAME:-biblioteca}?sslmode=disable"
+    ports:
+      - "${PG_EXPORTER_PORT:-9187}:9187"
+    networks:
+      - nest-network
+    depends_on:
+      - postgres
+
+  redis-exporter:
+    image: oliver006/redis_exporter:latest
+    container_name: nest-redis-exporter
+    restart: unless-stopped
+    environment:
+      REDIS_ADDR: "redis://redis:6379"
+    ports:
+      - "${REDIS_EXPORTER_PORT:-9121}:9121"
+    networks:
+      - nest-network
+    depends_on:
+      - redis
