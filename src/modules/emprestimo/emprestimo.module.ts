@@ -7,11 +7,11 @@ import { Emprestimo } from './domain/entities/emprestimo.entity';
 import { EmprestimoController } from './api/controller/emprestimo.controller';
 
 @Module({
-  imports: [  TypeOrmModule.forFeature([Emprestimo, Usuario, Livro]),],
+  imports: [TypeOrmModule.forFeature([Emprestimo, Usuario, Livro]),],
 
   controllers: [EmprestimoController],
   providers: [EmprestimoService],
-  exports:  [EmprestimoService]
+  exports: [EmprestimoService]
 })
-export class EmprestimoModule {}
+export class EmprestimoModule { }
 
