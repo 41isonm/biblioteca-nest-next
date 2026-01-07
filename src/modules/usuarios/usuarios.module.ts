@@ -10,7 +10,7 @@ import { UsuarioRepository } from './data/repositories/usuario.repository';
   controllers: [UsuariosController],
   providers: [
     UsuariosService,
-    UsuarioRepository, // ← só adicionar aqui, o NestJS cuida do resto
+    UsuarioRepository, 
   ],
   exports: [UsuariosService],
 })

@@ -1,44 +1,41 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Livro } from '../entities/livro.entity';
 import { CreateLivroDto } from '../../api/dto/create-livro.dto';
-
-
+import { Livro } from '../entities/livro.entity';
+import { LivroRepository } from '../../data/repositories/livro.repository';
 
 @Injectable()
 export class LivrosService {
   constructor(
-    @InjectRepository(Livro)
-    private livrosRepository: Repository<Livro>,
+    private readonly livroRepository: LivroRepository,
   ) {}
 
   async create(createLivroDto: CreateLivroDto): Promise<Livro> {
-    const livro = this.livrosRepository.create(createLivroDto);
-    return await this.livrosRepository.save(livro);
+    return await this.livroRepository.create(createLivroDto);
   }
 
   async findAll(): Promise<Livro[]> {
-    return await this.livrosRepository.find();
+    return await this.livroRepository.findAll();
   }
 
-  async findOne(livroid: number): Promise<Livro> {
-    const livro = await this.livrosRepository.findOne({ where: { livroid } });
-    
+  async findOne(id: string | number): Promise<Livro> {
+    const livro = await this.livroRepository.findById(id);
+
     if (!livro) {
-      throw new NotFoundException(`Livro com ID ${livroid} não encontrado`);
+      throw new NotFoundException(`Livro com ID ${id} não encontrado`);
     }
-    
+
     return livro;
   }
 
- 
 
-  async remove(id: number): Promise<void> {
-    const livro = await this.findOne(id);
-    
-    await this.livrosRepository.remove(livro);
+
+  async remove(id: string | number): Promise<void> {
+    await this.findOne(id);
+    await this.livroRepository.remove(id);
   }
 
- 
+  async softRemove(id: string | number): Promise<void> {
+    await this.findOne(id);
+    await this.livroRepository.softRemove(id);
+  }
 }
