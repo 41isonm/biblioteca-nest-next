@@ -1,6 +1,7 @@
+import { Livro } from 'src/modules/livros/domain/entities/livro.entity';
+import { Usuario } from 'src/modules/usuarios/domain/entities/usuario.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { Usuario } from '../../usuarios/entities/usuario.entity';
-import { Livro } from '../../livros/entities/livro.entity';
+
 
 @Entity('emprestimos')
 export class Emprestimo {

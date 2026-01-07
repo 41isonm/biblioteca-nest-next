@@ -1,5 +1,5 @@
+import { Emprestimo } from 'src/modules/emprestimo/domain/entities/emprestimo.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Emprestimo } from '../../emprestimo/entities/emprestimo.entity';
 
 @Entity('livros') 
 export class Livro {

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsuariosModule } from './usuarios/usuarios.module';
+import { UsuariosModule } from './modules/usuarios/usuarios.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
-import { LivrosModule } from './livros/livros.module';
-import { EmprestimoModule } from './emprestimo/emprestimo.module';
+import { LivrosModule } from './modules/livros/livros.module';
+import { EmprestimoModule } from './modules/emprestimo/emprestimo.module';
 
 @Module({
   imports:

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EmprestimoController } from './emprestimo.controller';
-import { EmprestimoService } from './emprestimo.service';
+import { EmprestimoService } from '../../domain/services/emprestimo.service';
 
 describe('EmprestimoController', () => {
   let controller: EmprestimoController;

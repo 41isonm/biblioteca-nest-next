@@ -1,4 +1,4 @@
-import { Emprestimo } from "src/emprestimo/entities/emprestimo.entity";
+import { Emprestimo } from "src/modules/emprestimo/domain/entities/emprestimo.entity";
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 
 @Entity()

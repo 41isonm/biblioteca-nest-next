@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Emprestimo } from './entities/emprestimo.entity';
 import { Repository, Between, MoreThanOrEqual, LessThanOrEqual, DataSource } from 'typeorm';
-import { Usuario } from '../usuarios/entities/usuario.entity';
-import { Livro } from '../livros/entities/livro.entity';
-import { CreateEmprestimoDto } from './dto/create-emprestimo.dto';
+import { Usuario } from '../../../usuarios/domain/entities/usuario.entity';
+import { Livro } from '../../../livros/domain/entities/livro.entity';
+import { CreateEmprestimoDto } from '../../api/dto/create-emprestimo.dto';
+import { Emprestimo } from '../entities/emprestimo.entity';
 
 @Injectable()
 export class EmprestimoService {

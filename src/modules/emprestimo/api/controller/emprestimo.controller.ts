@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { EmprestimoService } from './emprestimo.service';
-import { CreateEmprestimoDto } from './dto/create-emprestimo.dto';
-import { UpdateEmprestimoDto } from './dto/update-emprestimo.dto';
+import { EmprestimoService } from '../../domain/services/emprestimo.service';
+import { CreateEmprestimoDto } from '../dto/create-emprestimo.dto';
+
 
 @Controller('emprestimo')
 export class EmprestimoController {
