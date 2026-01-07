@@ -62,32 +62,45 @@ Sistema completo de gerenciamento de biblioteca com três entidades principais:
   
 ## 🏗️ **Arquitetura do Sistema**
 
+```
+src/
+├── modules/
+│   ├── auth/       # Autenticação, OAuth, MFA, sessões
+│   ├── users/      # Gerenciamento de usuários
+│   ├── roles/      # Roles e permissões 
+│   ├── livros/     # Gerenciamento de usuarios
+│   └── emprestimos/      # Listas e registro de livros emprestados por usuario 
+├── common/         # Guards, decorators, interceptors compartilhados
+├── infrastructure/ # Adaptadores externos (database, email, monitoring)
+├── config/         # Providers de configuração + validação
+└── main.ts         # Bootstrap + Swagger
+```
 
-## 🚀 Tecnologias Utilizadas
 
-### Backend (NestJS)
-- NestJS (framework progressivo Node.js)
-- TypeScript
-- Swagger (OpenAPI) para documentação da API
-- Jest + Supertest para testes
-- ESLint + Prettier
-- Class Validator & Class Transformer
+Cada módulo segue a estrutura Clean Architecture:
 
-### Frontend (Next.js)
-- Next.js 14+ (App Router)
-- React 18 + Server Components
-- TypeScript
-- Tailwind CSS (ou outra lib de estilização – ajustar conforme seu projeto)
-- Axios ou Fetch para consumo da API
-- ESLint + Prettier
+```
+modules/<feature>/
+├── <feature>.module.ts     # Módulo na raiz
+├── index.ts                # Exports públicos
+├── domain/
+│   ├── entities/           # Entidades de domínio
+│   ├── repositories/       # Interfaces de repositório
+│   ├── services/           # Serviços de domínio
+│   ├── types/              # Tipos, enums, constantes
+│   └── use-cases/          # Casos de uso 
+├── data/
+│   ├── sources/            # Fontes Prisma
+│   ├── mappers/            # Conversão Prisma ↔ Domínio
+│   └── repositories/       # Implementações de repositório
+└── presentation/
+    ├── controllers/        # Controllers (handle())
+    └── dto/
+        ├── request/        # DTOs de entrada
+        └── response/       # DTOs de saída
+```
 
-### Infra & DevOps
-- GitHub Actions para CI/CD
-- Docker (opcional para containerização)
-- Notificações automáticas:
-  - Slack (via Incoming Webhook)
-  - Telegram
-  - Criação automática de Issue no GitHub em caso de falha
+
 
 
 ## ⚙️ Como Rodar Localmente
