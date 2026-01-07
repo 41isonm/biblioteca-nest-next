@@ -20,7 +20,7 @@ Projeto fullstack completo para gerenciamento de biblioteca, integrando **backen
 - `PATCH /emprestimos/:id/devolver` - Registrar devolução
 - Filtros por usuário e livro
 
-  ## para observar os demais endpoint acesse http://localhost:3000/ap
+  ## para observar os demais endpoint acesse http://localhost:3000/api
 
 ## 📋 **Descrição do Sistema**
 
