@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  test-db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=test_biblioteca  # Nome correto do banco
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test -d test_biblioteca"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  test-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    depends_on:
+      test-db:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=test
+      - DB_HOST=test-db
+      - DB_PORT=5432
+      - DB_USERNAME=test
+      - DB_PASSWORD=test
+      - DB_DATABASE=test_biblioteca
+    command: npm run test:e2e

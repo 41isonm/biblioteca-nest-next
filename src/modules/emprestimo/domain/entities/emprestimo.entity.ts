@@ -1,27 +1,26 @@
-import { Livro } from 'src/modules/livros/domain/entities/livro.entity';
-import { Usuario } from 'src/modules/usuarios/domain/entities/usuario.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-
+import { Usuario } from '../../../usuarios/domain/entities/usuario.entity';
+import { Livro } from '../../../livros/domain/entities/livro.entity';
 
 @Entity('emprestimos')
 export class Emprestimo {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @ManyToOne(() => Usuario, (usuario) => usuario.emprestimos)
   @JoinColumn({ name: 'usuario_id' })
-  usuario: Usuario;
+  usuario!: Usuario;
 
   @ManyToOne(() => Livro, (livro) => livro.emprestimos)
   @JoinColumn({ name: 'livro_id' })
-  livro: Livro;
+  livro!: Livro;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  dataEmprestimo: Date;
+  dataEmprestimo!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  dataDevolucao: Date;
+  dataDevolucao!: Date;
 
   @Column({ default: 'pendente' })
-  status: string;
+  status!: string;
 }

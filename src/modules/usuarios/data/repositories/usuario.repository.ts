@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUsuarioDto } from '../../api/dto/create-usuario.dto';
 import { UpdateUsuarioDto } from '../../api/dto/update-usuario.dto';
-import { Usuario } from '../../entities/usuario.entity';
 import { IUsuarioRepository } from '../../domain/repositories/iusuario.repository';
+import { Usuario } from '../../domain/entities/usuario.entity';
 
 
 @Injectable()
